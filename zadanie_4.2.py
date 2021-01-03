@@ -1,12 +1,18 @@
-def check_for_palindrome(word=""):
+def check_for_palindrome(potential_palindrome=""):
     """
-        Check if given word (string) is a palindrome.
-        :param word: String to evaluate
+        Check if given string is a palindrome.
+        :param potential_palindrome: String to evaluate
         :return: boolean True or False
     """
-    lowercase_word = word.lower()
-    reversed_word = lowercase_word[::-1]
-    if lowercase_word == reversed_word:
+    str_to_evaluate = ""
+
+    for char in potential_palindrome:
+        if char.isalnum():
+            str_to_evaluate += char.lower()
+
+    reversed_str_to_evaluate = str_to_evaluate[::-1]
+
+    if str_to_evaluate == reversed_str_to_evaluate:
         return True
     else:
         return False
