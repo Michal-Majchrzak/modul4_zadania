@@ -16,33 +16,15 @@ def make_calculations(first_no, second_no, math_operation):
 def choose_operation(prompt_user):
     while True:
         user_answer = input(prompt_user)
-        accepted_chars = {'1', '2', '3', '4'}
-        modified_answer = ""
+        numbers_only = int(''.join(char for char in user_answer if char.isdigit()))
 
         if user_answer == 'exit':
             exit(0)
 
-        for char in user_answer:
-            if char in accepted_chars:
-                modified_answer += char
-
-        if len(modified_answer) >= 1:
-            if propose_correct_answer(user_answer, modified_answer[0]):
-                return modified_answer[0]
-            else:
-                continue
-        elif modified_answer == "":
+        if 4 >= numbers_only >= 1:
+            return numbers_only
+        else:
             print(f"Podana odpowiedź {user_answer} jest niepoprawna. Aby zakończyć wpisz : exit")
-
-
-def propose_correct_answer(user_answer, proposition):
-    yes_or_no = input(f"Podana odpowiedź {user_answer} jest niepoprawna, czy chiałeś wybrać {proposition} ? [t/n] : ")
-    if yes_or_no == 'exit':
-        exit(0)
-    elif yes_or_no == 't' or yes_or_no == 'T':
-        return True
-    else:
-        return False
 
 
 if __name__ == "__main__":
