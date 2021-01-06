@@ -14,21 +14,35 @@ def make_calculations(first_no, second_no, math_operation):
 
 
 def choose_operation(prompt_user):
-    user_answer = input(prompt_user)
-    accepted_chars = {'1', '2', '3', '4'}
-    verified_answer = ""
+    while True:
+        user_answer = input(prompt_user)
+        accepted_chars = {'1', '2', '3', '4'}
+        modified_answer = ""
 
-    for char in user_answer:
-        if char in accepted_chars:
-            verified_answer += char
+        if user_answer == 'exit':
+            exit(0)
 
-    if len(verified_answer) > 1 or user_answer is not verified_answer:
-        yes_or_no = input(f"Podano niepoprawną odpowiedź, czy chiałeś wybrać {verified_answer[0]} ? [t/n] : ")
-        if yes_or_no == 't' or yes_or_no == 'T':
-            return verified_answer[0]
-        else:
-            print(f"Podana odpowiedź : {user_answer} jest błędna, program zakończony.")
-            exit(1)
+        for char in user_answer:
+            if char in accepted_chars:
+                modified_answer += char
+
+        if len(modified_answer) >= 1:
+            if propose_correct_answer(user_answer, modified_answer[0]):
+                return modified_answer[0]
+            else:
+                continue
+        elif modified_answer == "":
+            print(f"Podana odpowiedź {user_answer} jest niepoprawna. Aby zakończyć wpisz : exit")
+
+
+def propose_correct_answer(user_answer, proposition):
+    yes_or_no = input(f"Podana odpowiedź {user_answer} jest niepoprawna, czy chiałeś wybrać {proposition} ? [t/n] : ")
+    if yes_or_no == 'exit':
+        exit(0)
+    elif yes_or_no == 't' or yes_or_no == 'T':
+        return True
+    else:
+        return False
 
 
 if __name__ == "__main__":
