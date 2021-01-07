@@ -1,16 +1,27 @@
-def make_calculations(first_no, second_no, math_operation):
-    if math_operation == 1:
-        print(f"Dodaje {first_no} i {second_no}")
-        return first_no + second_no
-    elif math_operation == 2:
-        print(f"Odejmuję {first_no} i {second_no}")
-        return first_no - second_no
-    elif math_operation == 3:
-        print(f"Mnożę {first_no} i {second_no}")
-        return first_no * second_no
-    elif math_operation == 4:
-        print(f'Dzielę {first_no} i {second_no}')
-        return first_no / second_no
+def make_calculations(numbers_list, math_operation):
+    result = 0
+
+    if math_operation == 3 and 0 in numbers_list:
+        return 0
+
+    if math_operation == 4 and 0 in numbers_list[1:]:
+        print("Nie dzielimy przez 0!")
+        return "Błąd - dzielenie przez 0."
+
+    for index, number in enumerate(numbers_list):
+        if index == 0:
+            result = numbers_list[index]
+            continue
+        elif math_operation == 1:
+            result += number
+        elif math_operation == 2:
+            result -= number
+        elif math_operation == 3:
+            result *= number
+        elif math_operation == 4:
+            result /= number
+
+    return result
 
 
 def choose_operation(prompt_user):
@@ -61,10 +72,33 @@ def numbers_only_input(prompt_user):
             print(f"Podana odpowiedź {user_answer} jest niepoprawna. Aby zakończyć wpisz : exit")
 
 
+def collect_numbers(prompt_user):
+    user_answer = input(prompt_user)
+
+    if user_answer == 'exit':
+        exit(0)
+
+    only_digits = ''.join(char for char in user_answer if char.isdigit())
+
+    if only_digits == '':
+        print(f"Nie wybrano żadnych cyfr. Przyjmuję standardowe 2 elementy.")
+        only_digits = 2
+    elif int(only_digits) <= 1:
+        print(f"Wybrano 1 lub mniej elementów. Przyjmuję standardowe 2 elementy.")
+        only_digits = 2
+    else:
+        only_digits = int(only_digits)
+
+    numbers_list = []
+    for element in range(1, only_digits+1):
+        numbers_list.append(numbers_only_input(f"Podaj składnik {element} "))
+
+    return numbers_list
+
+
 if __name__ == "__main__":
     math_operation = choose_operation("1 Dodawanie, 2 Odejmowanie, 3 Mnożenie, 4 Dzielenie: ")
-    first_number = numbers_only_input("Podaj składnik 1. ")
-    second_number = numbers_only_input("Podaj składnik 2. ")
-    result = make_calculations(first_number, second_number, math_operation)
+    elements_list = collect_numbers("Proszę podać ilość elementów : ")
+    calulations_result = make_calculations(elements_list, math_operation)
 
-    print(f"Wynik to {result}")
+    print(f"Wynik to {calulations_result}")
