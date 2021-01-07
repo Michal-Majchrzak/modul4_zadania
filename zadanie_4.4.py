@@ -1,18 +1,17 @@
-def make_calculations(numbers_list, math_operation):
-    result = 0
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
-    if math_operation == 3 and 0 in numbers_list:
-        return 0
+
+def make_calculations(numbers_list, math_operation):
 
     if math_operation == 4 and 0 in numbers_list[1:]:
-        print("Nie dzielimy przez 0!")
-        return "Błąd - dzielenie przez 0."
+        logging.error("Jedna z liczb przez które próbujesz dzielić to 0.")
+        return str("Błąd - dzielenie przez 0.")
 
-    for index, number in enumerate(numbers_list):
-        if index == 0:
-            result = numbers_list[index]
-            continue
-        elif math_operation == 1:
+    result = numbers_list[0]
+
+    for number in numbers_list[1:]:
+        if math_operation == 1:
             result += number
         elif math_operation == 2:
             result -= number
@@ -21,6 +20,8 @@ def make_calculations(numbers_list, math_operation):
         elif math_operation == 4:
             result /= number
 
+    math_op_dict = {1: "Dodaję", 2: "Odejmuję", 3: "Mnożę", 4: "Dzielę"}
+    logging.info(f"{math_op_dict[math_operation]} {str(numbers_list)[1:-1]}")
     return result
 
 
@@ -97,8 +98,8 @@ def collect_numbers(prompt_user):
 
 
 if __name__ == "__main__":
-    math_operation = choose_operation("1 Dodawanie, 2 Odejmowanie, 3 Mnożenie, 4 Dzielenie: ")
+    chosen_operation = choose_operation("Podaj działanie, posługując sie odpowiednią liczb, 1 Dodawanie, 2 Odejmowanie, 3 Mnożenie, 4 Dzielenie: ")
     elements_list = collect_numbers("Proszę podać ilość elementów : ")
-    calulations_result = make_calculations(elements_list, math_operation)
+    calculations_result = make_calculations(elements_list, chosen_operation)
 
-    print(f"Wynik to {calulations_result}")
+    print(f"Wynik to : {calculations_result}")
