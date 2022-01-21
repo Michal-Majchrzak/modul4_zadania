@@ -1,26 +1,27 @@
 import logging
+import re
 logging.basicConfig(level=logging.DEBUG)
 
 
 def choose_operation(prompt_user):
+    operation_regex = re.compile(r'^[1-4]$')
     while True:
         user_answer = input(prompt_user)
+        user_answer = user_answer.strip()
 
         if user_answer == 'exit':
             exit(0)
 
-        numbers_only = 0
-        if user_answer != '':
-            numbers_only = int(''.join(char for char in user_answer if char.isdigit()))
-
-        if 4 >= numbers_only >= 1:
-            return numbers_only
+        if operation_regex.match(user_answer):
+            print(f'Wybrano : {user_answer}')
+            return int(user_answer)
         else:
             print(f"Podana odpowiedź {user_answer} jest niepoprawna. Aby zakończyć wpisz : exit")
 
 
 def collect_numbers(prompt_user):
     user_answer = input(prompt_user)
+    user_answer = user_answer.strip()
 
     if user_answer == 'exit':
         exit(0)
@@ -44,36 +45,22 @@ def collect_numbers(prompt_user):
 
 
 def numbers_only_input(prompt_user):
-    accepted_chars = {'-', '.', ','}
+    numbers_only_regex = re.compile(r'^[-]?\d+([,.]\d+)?$')
 
     while True:
         user_answer = input(prompt_user)
+        user_answer = user_answer.strip()
+        user_answer = user_answer.replace(',', '.')
 
         if user_answer == 'exit':
             exit(0)
 
-        # Separate from user's answer only digits and acceptable chars defined in set:accepted_chars.
-        # Then replace commas to dots to help with casting to float
-        semi_acceptable_answer = ''.join(char for char in user_answer if char.isdigit() or char in accepted_chars)
-        semi_acceptable_answer = semi_acceptable_answer.replace(',', '.')
-
-        if semi_acceptable_answer != '':
-            is_negative = (semi_acceptable_answer[0] == '-')
-            number_elements = semi_acceptable_answer.rsplit('.', maxsplit=1)
-            acceptable_answer = ''
-
-            if len(number_elements) == 1:
-                acceptable_answer = ''.join(char for char in number_elements[0] if char.isdigit())
-            else:
-                acceptable_answer = ''.join(char for char in number_elements[0] if char.isdigit())
-                acceptable_answer += '.' + number_elements[1]
-
-            if is_negative:
-                return -float(acceptable_answer)
-            else:
-                return float(acceptable_answer)
+        if numbers_only_regex.match(user_answer):
+            print(f'Wprowadzono : {user_answer}')
+            return float(user_answer)
         else:
             print(f"Podana odpowiedź {user_answer} jest niepoprawna. Aby zakończyć wpisz : exit")
+
 
 
 def make_calculations(numbers_list, math_operation):
